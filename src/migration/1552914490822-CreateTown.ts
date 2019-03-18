@@ -30,7 +30,7 @@ export class CreateTown1552914490822 implements MigrationInterface {
         }));
 
         await queryRunner.createForeignKey("town", new TableForeignKey({
-            name: "fk_town_district",
+            name: "FK_TOWN_DISTRICT",
             columnNames: [ "district_id", ],
             referencedTableName: "district",
             referencedColumnNames: [ "id", ],
@@ -39,8 +39,8 @@ export class CreateTown1552914490822 implements MigrationInterface {
         }));
 
         await queryRunner.createIndex("town", new TableIndex({
-            name: "unique_district_town",
-            columnNames: [ "district_id", "name", ],
+            name: "UNQ_DISTRICT_TOWN",
+            columnNames: [ "district_id", "name", "type", ],
             isUnique: true,
         }));
     }

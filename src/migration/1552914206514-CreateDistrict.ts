@@ -35,7 +35,7 @@ export class CreateDistrict1552914206514 implements MigrationInterface {
         }));
 
         await queryRunner.createIndex("district", new TableIndex({
-            name: "unique_district_region_name",
+            name: "UNQ_REGION_DISTRICT",
             columnNames: [ "region_id", "name", ],
             isUnique: true,
         }));

@@ -31,7 +31,7 @@ export class CreateStreet1552915060536 implements MigrationInterface {
 
 
         await queryRunner.createForeignKey("street", new TableForeignKey({
-            name: "fk_street_town",
+            name: "FK_STREET_TOWN",
             columnNames: [ "town_id", ],
             referencedTableName: "town",
             referencedColumnNames: [ "id", ],
@@ -40,7 +40,7 @@ export class CreateStreet1552915060536 implements MigrationInterface {
         }));
 
         await queryRunner.createIndex("street", new TableIndex({
-            name: "unique_town_street",
+            name: "UNQ_TOWN_STREET",
             columnNames: [ "town_id", "type", "name", ],
             isUnique: true,
         }));

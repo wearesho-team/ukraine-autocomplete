@@ -24,7 +24,7 @@ export class CreateHouse1552915353911 implements MigrationInterface {
         );
 
         await queryRunner.createForeignKey("house", new TableForeignKey({
-            name: "fk_house_street",
+            name: "FK_HOUSE_STREET",
             columnNames: [ "street_id", ],
             referencedTableName: "street",
             referencedColumnNames: [ "id", ],
