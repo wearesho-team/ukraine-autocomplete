@@ -70,7 +70,7 @@ export const Home = async (request: Request, response: Response) => {
             },
         ],
         links: {
-            gitHub: "https://github.com/wearesho-team/wearesho-autocomplete",
+            gitHub: "https://github.com/wearesho-team/ukraine-autocomplete",
         },
     })
 };
