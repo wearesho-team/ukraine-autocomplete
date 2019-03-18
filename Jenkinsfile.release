@@ -1,0 +1,25 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+
+    stages {
+        stage('Releasing') {
+            steps {
+                sh 'builder --to=deploy.json --config=meta.json'
+                sh 'telegram-release-notify --token=$TELEGRAM_TOKEN --recipient=$TELEGRAM_RECIPIENT --file=deploy.json'
+            }
+        }
+    }
+
+    post {
+        failure {
+            sh 'telegram-release-notify --token=$TELEGRAM_TOKEN --recipient=$TELEGRAM_RECIPIENT --file=meta.json --fail --comment="$(git log --format=%B -n 1)"'
+        }
+    }
+}

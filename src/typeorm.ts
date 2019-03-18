@@ -1,2 +1,2 @@
-import "src/bootstrap";
+import "./bootstrap";
 import "typeorm/cli";

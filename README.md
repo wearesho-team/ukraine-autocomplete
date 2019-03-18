@@ -22,7 +22,15 @@ Build:
 ```
 Run:
 ```bash
-docker run -p 3000:3000 -v /folder/.env:/usr/src/app/.env ukraine-autocomplete
+docker run -d -p 3000:3000 -v /folder/.env:/usr/src/app/.env ukraine-autocomplete --name autocomplete
+```
+Execute migrations:
+```bash
+docker exec -it autocomplete node /usr/src/app/build/typeorm.js migration:run
+```
+Import database:
+```bash
+docker exec -it autocomplete node /usr/src/app/build/import.js
 ```
 
 ## License
