@@ -1,0 +1,219 @@
+# Ukraine Autocomplete API
+Simple autocomplete API based on [Ukrposhta](https://ukrposhta.ua/dovidnik-poshtovix-adre/opis/) addresses database.
+
+# Description Of Usual Server Responses:
+- 200 `Ok` - response was successfuly processed.
+- 404 `Not Found` - invalid request path.
+- 500 `Internal Server Error` - something went wrong.
+
+If you pass invalid header or GET attribute application will ignore it instead of sending 400 response.
+
+## Data Structures
+
+### Error (object)
+Represents API error response.
+
+#### Properties
+- code: 404 (number, required) - duplicates HTTP status code
+- message: `Not Found!` (string, required) - describes error
+
+### Region (object)
+Describes country region.
+
+#### Properties
+- id: 1 (number, required)
+- name: `Дніпропетровська` (string, required)
+
+### District (object)
+Describes region destrict.
+
+#### Properties
+- id: 10 (number, required)
+- region_id: 1 (number, required) - identifier from Region object.
+- name: `Крижопільський` (string, required)
+
+### TownType (enum)
++ `town`
++ `hamlet`
++ `village`
+
+### Town (object)
+Describes region town / village / hamlet.
+
+#### Properties
+- id: 100 (number, required)
+- destrict_id: 10 (number, required) - identifier from Destrict object.
+- type: `town` (TownType, required)
+
+### Street (object)
+Describes town street.
+
+#### Properties
+- id: 1000 (number, required)
+- town_id: 100 (number, required) - identifier from Town object.
+- type: `вул` (string, required)
+- name: `Богдана Хмельницького` (string, required)
+
+
+### House (object)
+Describes house number on street.
+
+#### Properties
+- street_id: 1000 (number, required) - identifier from Street object.
+- number: `10б` (string, required) - house identifier
+
+### RouteQuery (object)
+Describes available GET query attributes for route.
+
+#### Properties
+- q: `Partial of region name.` (string, required) - description for q GET attribute
+- t: `Exact town type.` (string, optional) - description for t GET attributes
+
+### RouteHeaders (object)
+Describes available headers and their purpose for route.
+
+#### Properties
+- `X-Region-Id`: `Exact region ID.` (string, optional) - describes what for header value will be used
+- `X-Region-Name`: `URL Encoded partial of region name.` (string, optional)
+- `X-District-Id`: `Exact district ID.` (string, optional)
+- `X-District-Name`: `URL Encoded partial of district name.` (string, optional)
+
+### Route (object)
+Describes application route.
+
+#### Properties
+- name: `Towns` (string, required) - human readable path title.
+- path: `/towns` (string, required) - path for API requests.
+- description: `Searching towns.` (string, required) - human readable route description.
+- query (RouteQuery, required) - available optional GET attributes.
+- headers (RouteHeaders, required) - available optional request headers.
+
+### Application (object)
+Describes application API.
+
+#### Properties
+- name: `ukranian-autocomplete` (string, required) - application build name.
+- version: `1.0.0` - application build version.
+- routes (array[Route], required) - application available routes.
+
+## Home [/]
+
+### Get Application Information [GET]
+
++ Response 200 (application/json)
+    + Attributes (Application)
+
+## Regions [/regions]
+
+### Get Regions List [GET]
+
++ Response 200 (application/json)
+    + Attributes (array[Region])
+
+## Regions Search [/regions?q={query}]
+
+### Get Regions List By Query [GET]
+
++ Parameters
+    - query: `Дніпро` (string, optional) - full text search by name
+    
++ Response 200 (application/json)
+    + Attributes (array[Region])
+
+## Districts [/districts?q={query}]
+
++ Parameters
+    - query: `Дніпро` (string, optional) - full text search by name
+
+### Search Districts [GET]
+
++ Request (text/plain)
+
++ Response 200 (application/json)
+    + Attributes (array[District])
+
++ Request (text/plain)
+To search by region you have to add header.
+    
+    + Headers
+            X-Region-Id: 1 (number, required)
+
++ Response 200 (application/json)
+    + Attributes (array[Distinct])
+
++ Request (text/plain)
+To search by retion name you have to add another header.
+
+    + Headers
+            X-Region-Name: %D0%A5%D0%B0%D1%80%D0%BA (string, required) - url encoded region name or part of it
+            
++ Response 200 (application/json)
+    + Attributes (array)
+        - (District)
+            - region (Region)
+
+## Towns [/towns?q={query}&t={type}]
+
++ Parameters
+    - query: `Запор` (string, optional) - full text search by town name
+    - type: town (TownType, optional) - town type to search
+    
+### Search Towns [GET]
+
++ Request (text/plain)
+
++ Response 200 (application/json)
+    + Attributes (array[Town])
+
++ Request (text/plain)
+To search by region id, district id or name you have to add headers.
+
+    + Headers
+            X-Region-Id: 1
+            X-District-Id: 10
+            X-District-Name: Крижопільський
+
++ Response 200 (application/json)
+    + Attributes (array)
+        - Town
+            - district (District)
+
++ Request (text/plain)
+To search by region name add header. Response body will be changed.
+
+    + Headers
+            X-Region-Name: Дніпропетровськ
+
++ Response 200 (application/json)
+    + Attributes (array)
+        - (Town)
+            - district (District)
+                - region (Region)
+
+## Streets [/town/{id}/streets?q={query}&t={type}]
+
++ Parameters
+    - id: 100 (number, required) - ID of town to search in.
+    - query: `Харк` (string, optional) - full text search by name.
+    - type: `вул` (string, optional) - street type to search.
+
+### Search Town Streets [GET]
+
++ Request (text/plain)
+
++ Response 200 (application/json)
+    + Attributes (array[Street])
+
+
+## Houses [/street/{id}/houses?q={query}]
+
++ Parameters
+    - id: 100 (number, required) - ID of street to search in.
+    - query: `10б` (string, optional) - full text search by number.
+
+### Search Town Streets [GET]
+
++ Request (text/plain)
+
++ Response 200 (application/json)
+    + Attributes (array[House])

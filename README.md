@@ -1,12 +1,18 @@
 # Wearesho Autocomplete
-This project uses [Ukrposhta](https://ukrposhta.ua/dovidnik-poshtovix-adre/opis/) database 
-to generate database and provides simple API for searching addresses.
+
+- Using [Ukrposhta](https://ukrposhta.ua/dovidnik-poshtovix-adre/opis/) addresses database
+- Provides simple API for searching addresses
+(main purpose - registration forms autocomplete).
+- Supports PostgreSQL and MySQL out-of-box.
+- Written on TypeScript
+
+[Blueprint API](./apiary.apib) | [Apiary](https://ukraineautocomplete.docs.apiary.io/)
 
 ## Setup
 1. Run `npm i` command
 2. Setup database settings using environment (copy [.env.example](./.env.example) to `.env`)
 3. Run migrations `npm run migrate`
-4. Import database `npm run import` (execution time <5 min)
+4. Import database `npm run import` (execution time <10 min)
 3. Run `npm start` command
 
 ## License
