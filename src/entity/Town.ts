@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
+import { District } from "./District";
 
 @Entity()
 export class Town extends BaseEntity {
@@ -23,4 +24,8 @@ export class Town extends BaseEntity {
         type: "varchar",
     })
     name: string;
+
+    @ManyToOne(() => District, district => district.towns)
+    @JoinColumn({ name: "district_id", referencedColumnName: "id", })
+    district: District;
 }

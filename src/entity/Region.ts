@@ -1,4 +1,4 @@
-import { Entity, Column, BaseEntity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, BaseEntity, OneToMany, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
 import { District } from "./District";
 
 @Entity()
@@ -14,6 +14,7 @@ export class Region extends BaseEntity {
     })
     name: string;
 
-    @OneToMany(type => District, district => district.region)
+    @OneToMany(() => District, district => district.region)
+    @JoinColumn({ name: "id", referencedColumnName: "region_id" })
     districts: District[];
 }

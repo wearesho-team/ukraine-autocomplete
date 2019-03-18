@@ -3,25 +3,52 @@ import * as entity from "../entity";
 import * as data from "../data";
 
 export const Town = async (request: Request, response: Response) => {
-    const query = entity.District.createQueryBuilder("District");
+    const query = entity.Town.createQueryBuilder("Town");
 
-    if ("string" === typeof request.query[ "q" ]) {
-        query.andWhere("District.name like :name", { name: `%${request.query[ data.Query.name ]}%` });
+    const name = request.query[ data.Query.name ];
+    if ("string" === typeof name) {
+        query.andWhere("lower(Town.name) like :name", { name: `%${name.toLowerCase()}%` });
     }
 
+    const type = request.query[ data.Query.type ];
+    if ("string" === typeof type) {
+        query.andWhere("Town.type = :type", { type, });
+    }
+
+    const districtId = request.header(data.Header.DistrictId);
+    if ("string" === typeof districtId && districtId.match(/^\d+$/)) {
+        query.andWhere('Town.district_id = :districtId', { districtId, });
+    }
+
+    let districtName = request.header(data.Header.DistrictName);
     const regionId = request.header(data.Header.RegionId);
-    if ("string" === typeof regionId && regionId.match(/^\d+$/)) {
-        query.andWhere(
-            "District.region_id = :regionId",
-            { regionId, }
-        );
+    let regionName = request.header(data.Header.RegionName);
+    if (districtName || regionId || regionName) {
+        query.innerJoinAndSelect("Town.district", "District")
     }
 
-    const regionName = request.header(data.Header.RegionName);
-    if ("string" === typeof regionName) {
+    if ("string" === typeof districtName) {
+        districtName = `%${decodeURIComponent(districtName).toLowerCase()}%`;
         query
-            .leftJoinAndSelect("District.region", "Region")
-            .andWhere('Region.name like :regionName', { regionName: `%${decodeURIComponent(regionName)}%` })
+            .andWhere(
+                "lower(District.name) like :districtName",
+                { districtName, }
+            );
+    }
+
+    if ("string" === typeof regionId && regionId.match(/^\d+$/)) {
+        query
+            .andWhere(
+                "District.region_id = :regionId",
+                { regionId, }
+            );
+    }
+
+    if ("string" === typeof regionName) {
+        regionName = `%${decodeURIComponent(regionName).toLowerCase()}%`;
+        query
+            .innerJoinAndSelect("District.region", "Region")
+            .andWhere('lower(Region.name) like :regionName', { regionName, })
     }
 
     query.limit(25);

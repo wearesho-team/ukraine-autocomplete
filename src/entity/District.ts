@@ -1,5 +1,6 @@
-import { Entity, Column, BaseEntity, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, BaseEntity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Region } from "./Region";
+import { Town } from "./Town";
 
 @Entity()
 export class District extends BaseEntity {
@@ -19,7 +20,11 @@ export class District extends BaseEntity {
     })
     name: string;
 
-    @ManyToOne(type => Region, region => region.districts)
+    @ManyToOne(() => Region, region => region.districts)
     @JoinColumn({ name: "region_id", referencedColumnName: "id", })
     region: Region;
+
+    @OneToMany(() => Town, town => town.district)
+    @JoinColumn({ name: "id", referencedColumnName: "district_id", })
+    towns: Town[];
 }

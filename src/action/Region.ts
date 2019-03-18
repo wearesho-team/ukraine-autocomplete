@@ -7,7 +7,7 @@ export const Region = async (request: Request, response: Response) => {
 
     const name = request.query(data.Query.name);
     if ("string" === name) {
-        query.andWhere("name like :name", { name: `%${name}%` });
+        query.andWhere("lower(name) like :name", { name: `%${name.toLowerCase()}%` });
     }
 
     query.limit(25);

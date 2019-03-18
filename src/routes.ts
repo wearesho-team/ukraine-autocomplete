@@ -14,6 +14,10 @@ export const Routes: Array<{
         action: action.District,
     },
     {
+        path: "/towns",
+        action: action.Town,
+    },
+    {
         path: "/",
         action: action.Home,
     }

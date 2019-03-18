@@ -5,8 +5,9 @@ import * as data from "../data";
 export const District = async (request: Request, response: Response) => {
     const query = entity.District.createQueryBuilder("District");
 
-    if ("string" === typeof request.query[ "q" ]) {
-        query.andWhere("District.name like :name", { name: `%${request.query[ data.Query.name ]}%` });
+    const name = request.query[ data.Query.name ];
+    if ("string" === name) {
+        query.andWhere("lower(District.name) like :name", { name: `%${name.toLowerCase()}%` });
     }
 
     const regionId = request.header(data.Header.RegionId);
@@ -17,11 +18,12 @@ export const District = async (request: Request, response: Response) => {
         );
     }
 
-    const regionName = request.header(data.Header.RegionName);
+    let regionName = request.header(data.Header.RegionName);
     if ("string" === typeof regionName) {
+        regionName = `%${decodeURIComponent(regionName).toLowerCase()}%`;
         query
-            .leftJoinAndSelect("District.region", "Region")
-            .andWhere('Region.name like :regionName', { regionName: `%${decodeURIComponent(regionName)}%` })
+            .innerJoinAndSelect("District.region", "Region")
+            .andWhere('lower(Region.name) like :regionName', { regionName, })
     }
 
     query.limit(25);
