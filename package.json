@@ -1,4 +1,5 @@
 {
+  "name": "wearesho-autocomplete",
   "devDependencies": {
     "@types/csv-parse": "^1.1.12",
     "@types/dotenv": "^6.1.0",
@@ -23,5 +24,6 @@
     "start": "ts-node src/index.ts",
     "import": "ts-node src/import.ts",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run"
-  }
+  },
+  "license": "Apache-2.0"
 }
