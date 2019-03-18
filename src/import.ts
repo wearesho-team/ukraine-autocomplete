@@ -25,12 +25,7 @@ const parser = async function () {
         trim: true,
     });
 
-    const connection = await createConnection();
-    const { affected } = await connection.createQueryBuilder<entity.Region>(entity.Region, "Region")
-        .delete()
-        .execute();
-
-    console.log(`Removed ${affected} regions.`);
+    await createConnection();
 
     parser.on("readable", async () => {
         let record: [ string, string | undefined, string, number, string, string ];
@@ -44,11 +39,16 @@ const parser = async function () {
             }
 
             if (!region || region.name !== regionName) {
-                region = new entity.Region;
-                region.name = regionName;
-                await region.save();
+                region = await entity.Region.findOne({ where: { name: regionName, } });
 
-                regions++;
+                if (!region) {
+                    region = new entity.Region;
+                    region.name = regionName;
+                    await region.save();
+
+                    regions++;
+                }
+
                 console.log(`Region ${region.name}`);
             }
 
