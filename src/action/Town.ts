@@ -11,7 +11,7 @@ export const Town = async (request: Request, response: Response) => {
     }
 
     const type = request.query[ data.Query.type ];
-    if ("string" === typeof type) {
+    if ("string" === typeof type && Object.values(data.TownType).includes(type)) {
         query.andWhere("Town.type = :type", { type, });
     }
 

@@ -18,6 +18,10 @@ export const Routes: Array<{
         action: action.Town,
     },
     {
+        path: "/town/:id/streets",
+        action: action.Street,
+    },
+    {
         path: "/",
         action: action.Home,
     }
