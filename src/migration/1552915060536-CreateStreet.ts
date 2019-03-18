@@ -9,6 +9,7 @@ export class CreateStreet1552915060536 implements MigrationInterface {
                     name: "id",
                     type: "int",
                     isPrimary: true,
+                    isGenerated: true,
                 },
                 {
                     name: "town_id",

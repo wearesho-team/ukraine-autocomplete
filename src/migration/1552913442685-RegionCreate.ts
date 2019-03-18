@@ -10,6 +10,7 @@ export class RegionCreate1552913442685 implements MigrationInterface {
                     name: "id",
                     type: "int",
                     isPrimary: true,
+                    isGenerated: true,
                 },
                 {
                     name: "name",

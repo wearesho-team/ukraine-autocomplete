@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, BaseEntity, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Region } from "./Region";
 
 @Entity()

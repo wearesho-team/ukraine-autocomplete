@@ -10,6 +10,7 @@ export class CreateDistrict1552914206514 implements MigrationInterface {
                     name: "id",
                     type: "int",
                     isPrimary: true,
+                    isGenerated: true,
                 },
                 {
                     name: "region_id",

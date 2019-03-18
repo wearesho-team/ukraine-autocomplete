@@ -9,6 +9,7 @@ export class CreateTown1552914490822 implements MigrationInterface {
                     name: "id",
                     type: "int",
                     isPrimary: true,
+                    isGenerated: true,
                 },
                 {
                     name: "district_id",
