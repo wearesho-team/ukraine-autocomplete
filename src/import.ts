@@ -6,7 +6,9 @@ import * as data from "./data";
 import { Iconv } from "iconv";
 import { createConnection } from "typeorm";
 
-const postIndexHousesUrl = `http://services.ukrposhta.com/postindex_new/upload/houses.zip`;
+const postIndexHousesUrl = process.env.UKRPOSHTA_DB_URL
+    || 'http://services.ukrposhta.com/postindex_new/upload/houses.zip';
+
 const parser = async function () {
     let region: entity.Region | undefined;
     let district: entity.District | undefined;
@@ -35,7 +37,7 @@ const parser = async function () {
         while (record = parser.read()) {
             let [ regionName, districtName, townData, , streetData, housesNumbers ] = record;
 
-            if (regionName === "Область") {
+            if (!regionName || regionName === "Область") {
                 continue;
             }
 
