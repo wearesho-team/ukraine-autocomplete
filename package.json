@@ -23,7 +23,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "import": "ts-node src/import.ts",
-    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run"
+    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "build": "tsc"
   },
   "license": "Apache-2.0"
 }

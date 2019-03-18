@@ -9,6 +9,8 @@
     "target": "es2016",
     "module": "commonjs",
     "moduleResolution": "node",
+    "rootDir": "./src",
+    "sourceRoot": "./src",
     "outDir": "./build",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

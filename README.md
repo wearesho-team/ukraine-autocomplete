@@ -15,5 +15,15 @@
 4. Import database `npm run import` (execution time <10 min)
 3. Run `npm start` command
 
+## Docker
+Build:
+```bash
+ docker build -t ukraine-autocomplete -f ./docker/Dockerfile .
+```
+Run:
+```bash
+docker run -p 3000:3000 -v /folder/.env:/usr/src/app/.env ukraine-autocomplete
+```
+
 ## License
 [Apache-2.0](./LICENSE)
