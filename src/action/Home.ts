@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as meta from "../../meta";
 import * as data from "../data";
 
-export const Home = (request: Request, response: Response) => {
+export const Home = async (request: Request, response: Response) => {
     const origin = request.get("Origin")
         ? `${request.get("Origin")}`
         : "";

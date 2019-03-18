@@ -25,6 +25,7 @@ export class CreateTown1552914490822 implements MigrationInterface {
                 {
                     name: "name",
                     type: "varchar",
+                    length: "64",
                     isNullable: false,
                 }
             ]

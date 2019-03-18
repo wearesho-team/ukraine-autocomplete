@@ -11,6 +11,7 @@ export class Region extends BaseEntity {
         unique: true,
         nullable: false,
         type: "varchar",
+        length: 18,
     })
     name: string;
 

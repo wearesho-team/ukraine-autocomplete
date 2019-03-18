@@ -20,6 +20,7 @@ export class CreateDistrict1552914206514 implements MigrationInterface {
                 {
                     name: "name",
                     type: "varchar",
+                    length: "32",
                     isNullable: false,
                 }
             ]

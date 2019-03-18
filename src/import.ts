@@ -144,26 +144,28 @@ const parser = async function () {
                 }
             }
 
-            let streetHouseNumbers: Array<number> = (await entity.House.createQueryBuilder()
+            let streetHouseNumbers: Array<string> = (await entity.House.createQueryBuilder()
                 .andWhere('street_id = :streetId', { streetId: street.id, })
                 .select('number')
                 .getRawMany())
-                .map(({ number }) => Number(number));
+                .map(({ number }) => number.toString());
 
-            const promises = housesNumbers.split(",")
+            const promises = Array.from(new Set(housesNumbers.split(/[\s,.]+/)))
                 .filter((houseNumber: string) => !!houseNumber)
-                .map((houseNumber: string) => Number(houseNumber))
-                .filter((houseNumber) => streetHouseNumbers.includes(houseNumber))
-                .map(async (houseNumber: number) => {
+                .filter((houseNumber) => !streetHouseNumbers.includes(houseNumber))
+                .map((houseNumber) => houseNumber.toString())
+                .map((houseNumber: string) => {
                     const house = new entity.House;
                     house.street_id = street.id;
                     house.number = houseNumber;
 
-                    await house.save();
+                    if (houseNumber.length > 18) {
+                        console.error(`Unsupported length for house number "${houseNumber}"`);
+                        console.error(record);
+                        process.exit(-4);
+                    }
 
-                    houses++;
-
-                    return houseNumber;
+                    return house.save();
                 });
 
             await Promise.all(promises);

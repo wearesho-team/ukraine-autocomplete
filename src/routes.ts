@@ -3,7 +3,7 @@ import * as action from "./action";
 
 export const Routes: Array<{
     path: string,
-    action: (request: Request, response: Response, next: NextFunction) => void
+    action: (request: Request, response: Response, next: NextFunction) => Promise<void>
 }> = [
     {
         path: "/regions",
@@ -22,7 +22,15 @@ export const Routes: Array<{
         action: action.Street,
     },
     {
+        path: "/street/:id/houses",
+        action: action.House,
+    },
+    {
         path: "/",
         action: action.Home,
+    },
+    {
+        path: "*",
+        action: action.Error(404, "Not Found"),
     }
 ];

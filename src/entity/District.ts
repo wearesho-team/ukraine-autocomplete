@@ -16,6 +16,7 @@ export class District extends BaseEntity {
 
     @Column({
         type: "varchar",
+        length: 32,
         nullable: false,
     })
     name: string;

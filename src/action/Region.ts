@@ -5,12 +5,10 @@ import * as data from "../data";
 export const Region = async (request: Request, response: Response) => {
     const query = entity.Region.createQueryBuilder();
 
-    const name = request.query(data.Query.name);
-    if ("string" === name) {
+    const name = request.query[ data.Query.name ];
+    if ("string" === typeof name) {
         query.andWhere("lower(name) like :name", { name: `%${name.toLowerCase()}%` });
     }
-
-    query.limit(25);
 
     const regions = await query.getMany();
 

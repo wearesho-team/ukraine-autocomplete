@@ -15,6 +15,7 @@ export class Street extends BaseEntity {
     @Column({
         nullable: false,
         type: "varchar",
+        length: 16,
     })
     type: string;
 

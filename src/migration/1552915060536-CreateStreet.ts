@@ -19,11 +19,13 @@ export class CreateStreet1552915060536 implements MigrationInterface {
                 {
                     name: "type",
                     type: "varchar",
+                    length: "16",
                     isNullable: false,
                 },
                 {
                     name: "name",
                     type: "varchar",
+                    length: "64",
                     isNullable: false,
                 }
             ]

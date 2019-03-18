@@ -15,6 +15,7 @@ export class RegionCreate1552913442685 implements MigrationInterface {
                 {
                     name: "name",
                     type: "varchar",
+                    length: "18",
                     isNullable: false,
                     isUnique: true,
                 }

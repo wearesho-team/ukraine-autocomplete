@@ -24,6 +24,7 @@ export class Town extends BaseEntity {
     @Column({
         nullable: false,
         type: "varchar",
+        length: 64,
     })
     name: string;
 

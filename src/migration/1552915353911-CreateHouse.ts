@@ -12,7 +12,7 @@ export class CreateHouse1552915353911 implements MigrationInterface {
                 },
                 {
                     name: "number",
-                    type: "int",
+                    type: "varchar(18)",
                     isNullable: false,
                 },
             ]
