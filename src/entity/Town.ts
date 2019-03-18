@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
 import { District } from "./District";
+import { TownType } from "../data";
 
 @Entity()
 export class Town extends BaseEntity {
@@ -15,9 +16,10 @@ export class Town extends BaseEntity {
 
     @Column({
         nullable: false,
-        type: "varchar",
+        type: "enum",
+        enum: Object.values(TownType),
     })
-    type: string;
+    type: TownType;
 
     @Column({
         nullable: false,

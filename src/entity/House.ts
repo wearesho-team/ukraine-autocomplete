@@ -10,7 +10,7 @@ export class House extends BaseEntity {
 
     @PrimaryColumn({
         nullable: false,
-        type: "int",
+        type: "smallint",
     })
     number: number;
 }

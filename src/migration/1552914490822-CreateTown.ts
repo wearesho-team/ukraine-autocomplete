@@ -18,8 +18,9 @@ export class CreateTown1552914490822 implements MigrationInterface {
                 },
                 {
                     name: "type",
-                    type: "varchar",
+                    type: "enum",
                     isNullable: false,
+                    enum: [ "місто", "село", "смт", "селище", ],
                 },
                 {
                     name: "name",

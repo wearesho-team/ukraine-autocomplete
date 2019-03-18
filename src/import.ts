@@ -2,6 +2,7 @@ import * as http from "http";
 import * as unzip from "unzip";
 import * as parse from "csv-parse";
 import * as entity from "./entity";
+import * as data from "./data";
 import { Iconv } from "iconv";
 import { createConnection } from "typeorm";
 
@@ -58,9 +59,25 @@ const parser = async function () {
                 console.error(record);
                 process.exit(-1);
             }
-            const [ , townType, townName, ] = townMatch;
+            let [ , townType, townName, ] = townMatch;
             if (!districtName) {
                 districtName = townName;
+            }
+
+            switch (townType) {
+                case 'м':
+                    townType = data.TownType.town;
+                    break;
+                case 'с':
+                case 'с-ще':
+                    townType = data.TownType.hamlet;
+                    break;
+                case 'смт':
+                    townType = data.TownType.village;
+                    break;
+                default:
+                    console.error(`Unsupported town type`, townType, record);
+                    process.exit(-3);
             }
 
             if (!district || district.region_id !== region.id || district.name !== districtName) {
