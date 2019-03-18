@@ -64,23 +64,37 @@ const parser = async function () {
             }
 
             if (!district || district.region_id !== region.id || district.name !== districtName) {
-                district = new entity.District;
-                district.region_id = region.id;
-                district.name = districtName;
-                await district.save();
+                const where = {
+                    region_id: region.id,
+                    name: districtName,
+                };
+                district = await entity.District.findOne({ where, });
 
-                districts++;
+                if (!district) {
+
+                    district = new entity.District;
+                    Object.assign(district, where);
+                    await district.save();
+                    districts++;
+                }
+
                 console.log(`\tDistrict ${districtName} (${((new Date).getTime() - begin) / 1000})`);
             }
 
             if (!town || town.district_id !== district.id || town.type !== townType || town.name !== townName) {
-                town = new entity.Town;
-                town.district_id = district.id;
-                town.type = townType;
-                town.name = townName;
-                await town.save();
+                const where = {
+                    district_id: district.id,
+                    type: townType,
+                    name: townName,
+                };
+                town = await entity.Town.findOne({ where, });
 
-                towns++;
+                if (!town) {
+                    town = new entity.Town;
+                    Object.assign(town, where);
+                    await town.save();
+                    towns++;
+                }
             }
 
             if (!streetData) {
@@ -95,24 +109,38 @@ const parser = async function () {
             }
             const [ , streetType, streetName, ] = streetMatch;
             if (!street || street.town_id !== town.id || street.type !== streetType || street.name !== streetName) {
-                street = new entity.Street;
-                street.town_id = town.id;
-                street.type = streetType;
-                street.name = streetName;
-                await street.save();
+                const where = {
+                    town_id: town.id,
+                    type: streetType,
+                    name: streetName,
+                };
+                street = await entity.Street.findOne({ where, });
 
-                streets++;
+                if (!street) {
+                    street = new entity.Street;
+                    Object.assign(street, where);
+                    await street.save();
+
+                    streets++;
+                }
             }
+
+            let streetHouseNumbers: Array<number> = (await entity.House.createQueryBuilder()
+                .andWhere('street_id = :streetId', { streetId: street.id, })
+                .select('number')
+                .getRawMany())
+                .map(({ number }) => Number(number));
 
             const promises = housesNumbers.split(",")
                 .filter((houseNumber: string) => !!houseNumber)
                 .map((houseNumber: string) => Number(houseNumber))
+                .filter((houseNumber) => streetHouseNumbers.includes(houseNumber))
                 .map(async (houseNumber: number) => {
                     const house = new entity.House;
                     house.street_id = street.id;
                     house.number = houseNumber;
 
-                    await house.save().catch(() => houses--);
+                    await house.save();
 
                     houses++;
 
