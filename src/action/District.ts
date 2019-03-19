@@ -6,7 +6,7 @@ export const District = async (request: Request, response: Response) => {
     const query = entity.District.createQueryBuilder("District");
 
     const name = request.query[ data.Query.name ];
-    if ("string" === name) {
+    if ("string" === typeof name) {
         query.andWhere("lower(District.name) like :name", { name: `%${name.toLowerCase()}%` });
     }
 
