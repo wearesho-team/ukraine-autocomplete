@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import * as express from "express";
+import * as cors from "cors";
 import * as action from "./action";
 import * as data from "./data";
 import { Routes } from "./routes";
@@ -9,6 +10,7 @@ import { NextFunction, Request, Response } from "express";
 createConnection().then(async connection => {
     // create express app
     const app = express();
+    app.use(cors());
 
     // register express routes from defined application routes
     Routes.forEach(route => {
